@@ -51,7 +51,6 @@ public class SyncTest {
     public void testLockClassAndInvokeNonStaticMethodOnIt() throws InterruptedException {
         Thread t1 = createThreadToLock(Fuck.class);
 
-
         //新开的第２个线程
         Thread t2 = new Thread(new Runnable() {
 
@@ -87,7 +86,6 @@ public class SyncTest {
     }
 
     private Thread createThreadToLock(final Object obj) {
-        //新开两个线程，竞争资源.
         return new Thread(new Runnable() {
             @Override
             public void run() {
@@ -113,40 +111,38 @@ public class SyncTest {
 
     @Test
     public void testLockProperty() throws InterruptedException {
-        {
-            //新开两个线程，竞争资源.
-            Thread t1 = createThreadToLock(Fuck.YEAR_LIST);
+        //开两个线程，竞争资源.
+        Thread t1 = createThreadToLock(Fuck.YEAR_LIST);
 
-            //新开的第２个线程
-            Thread t2 = new Thread(new Runnable() {
+        //新开的第２个线程
+        Thread t2 = new Thread(new Runnable() {
 
-                @Override
-                public void run() {
-                    long t1 = System.currentTimeMillis();
+            @Override
+            public void run() {
+                long t1 = System.currentTimeMillis();
 
-                    //尝试使用被线程1锁住的资源
-                    System.out.println("Try to read YEAR_LIST");
+                //尝试使用被线程1锁住的资源
+                System.out.println("Try to read YEAR_LIST");
 
-                    //等等线程1释放该资源
-                    System.out.println(Fuck.YEAR_LIST);
+                //等等线程1释放该资源
+                System.out.println(Fuck.YEAR_LIST);
 
-                    System.out.println("read YEAR_LIST complete.");
+                System.out.println("read YEAR_LIST complete.");
 
-                    long t2 = System.currentTimeMillis();
+                long t2 = System.currentTimeMillis();
 
-                    //执行时间至少需要超过１秒才正确
-                    System.out.println(t2 - t1);
+                //执行时间至少需要超过１秒才正确
+                System.out.println(t2 - t1);
 
-                    Assert.assertThat(t2 - t1, greaterThan(1000L));
-                }
-            });
+                Assert.assertThat(t2 - t1, greaterThan(1000L));
+            }
+        });
 
-            t1.start();
-            t2.start();
-            t1.join();
-            t2.join();
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
 
-        }
 
     }
 
