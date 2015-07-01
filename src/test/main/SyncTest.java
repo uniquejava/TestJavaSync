@@ -95,6 +95,8 @@ public class SyncTest {
 
                     //占有该资源５秒
                     System.out.println("Locking fuck");
+                    //一旦占有锁后，可以直接访问该资源
+                    System.out.println(obj);
 
                     try {
                         Thread.sleep(5 * 1000);
